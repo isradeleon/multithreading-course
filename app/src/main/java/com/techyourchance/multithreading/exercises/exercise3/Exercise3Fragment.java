@@ -1,5 +1,6 @@
 package com.techyourchance.multithreading.exercises.exercise3;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,6 +49,7 @@ public class Exercise3Fragment extends BaseFragment {
         return "Exercise 3";
     }
 
+    @SuppressLint("SetTextI18n")
     private void countIterations() {
         /*
         1. Disable button to prevent multiple clicks
@@ -55,5 +57,23 @@ public class Exercise3Fragment extends BaseFragment {
         3. Show count in TextView
         4. When count completes, show "done" in TextView and enable the button
          */
+        mBtnCountSeconds.setEnabled(false);
+        new Thread(() -> {
+            for (int i = 1; i <= SECONDS_TO_COUNT; i++){
+                final int seconds = i;
+                runOnUIThread(() -> mTxtCount.setText("Seconds: "+seconds));
+
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    return;
+                }
+            }
+            runOnUIThread(() -> {
+                mTxtCount.setText("Done!");
+                mBtnCountSeconds.setEnabled(true);
+            });
+        }).start();
     }
 }

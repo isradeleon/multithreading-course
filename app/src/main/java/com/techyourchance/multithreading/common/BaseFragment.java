@@ -1,6 +1,8 @@
 package com.techyourchance.multithreading.common;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 
 import com.techyourchance.fragmenthelper.HierarchicalFragment;
@@ -15,6 +17,7 @@ import androidx.fragment.app.Fragment;
 public abstract class BaseFragment extends Fragment implements HierarchicalFragment {
 
     private PresentationCompositionRoot mPresentationCompositionRoot;
+    private final Handler handler = new Handler(Looper.getMainLooper());
 
     protected final PresentationCompositionRoot getCompositionRoot() {
         if (mPresentationCompositionRoot == null) {
@@ -45,4 +48,7 @@ public abstract class BaseFragment extends Fragment implements HierarchicalFragm
 
     protected abstract String getScreenTitle();
 
+    public void runOnUIThread(Runnable runnable){
+        handler.post(runnable);
+    }
 }
